@@ -6,10 +6,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ruined Satellite Pass Assessment Form</title>
     <link rel="stylesheet" href="style.css">
+    <script src="html2canvas.js"></script>
 </head>
 
 <body>
-    <div class="container">
+    <script>
+        function dwnld() {
+            //I'm going to go crazy :D
+            const container = document.getElementById("container");
+
+            html2canvas(container,{
+            scale: 3,
+            //this is needed because for some reason html2canvas can't just deal with inputs 
+            onclone: function(clonedDoc) {
+                // Find the same elements in the original DOM and the cloned DOM
+                const originals = container.querySelectorAll('input[type="text"]');
+                const clones = clonedDoc.getElementById('container').querySelectorAll('input[type="text"]');
+
+                originals.forEach((origInput, index) => {
+                const cloneInput = clones[index];
+
+                const span = document.createElement('span');
+                span.textContent = origInput.value;
+
+                // Copy computed styles
+                const style = window.getComputedStyle(origInput);
+                span.style.cssText = style.cssText;
+
+                // Explicitly copy dimensions, and fix some formatting
+                span.style.fontSize = "12px"
+                span.style.textAlign = "left";
+                span.style.display = 'inline-block';
+                span.style.width = origInput.offsetWidth + 'px';
+                span.style.height = origInput.offsetHeight + 'px';
+                span.style.lineHeight = style.lineHeight;
+                span.style.padding = style.padding;
+                span.style.border = style.border || '1px solid #ccc';
+                span.style.boxSizing = 'border-box';
+                span.style.verticalAlign = 'middle';
+                span.style.overflow = 'hidden';
+                span.style.whiteSpace = 'nowrap';
+
+                // Replace input with span in the cloned DOM
+                cloneInput.parentNode.replaceChild(span, cloneInput);
+                });
+            }
+            }).then(function(canvas) {
+                var link = document.createElement('a');
+                link.download = 'cryaboutit.png';
+                link.href = canvas.toDataURL()
+                link.click();
+
+            });
+        }
+    </script>
+    <div class="container" id="container">
         <div class="header">
             <img src="satdump.png" alt="Satdump Logo" class="satdump">
             <span class="satdump-title">SatDump</span>
@@ -50,7 +101,7 @@
                 <input type="checkbox">
                 <label>Other: </label>
 
-                <input type="text" style="height: 13px; width: 234px;" placeholder="Please specify">
+                <input type="text" style="height: auto; width: 234px;" placeholder="Please specify">
             </div>
 
             <div class="box" style="border-bottom: 0px;">
@@ -165,9 +216,10 @@
                 <input type="checkbox">
                 <label>Other: </label>
 
-                <input type="text" style="height: 13px; width: 430px;" placeholder="Please specify">
+                <input type="text" style="height: auto; width: 430px;" placeholder="Please specify">
             </div>
         </form>
+        <button onclick="dwnld()" data-html2canvas-ignore> Download as a picture</button>
 
         <p style="text-align: left; font-size: 12px; margin-left: 70px; margin-right: 70px;">Please return completed form to /dev/null along with any baseband, CADU or frames file in order for your ruined satellite pass to be assessed by a trained SatDump specialist.</p>
         

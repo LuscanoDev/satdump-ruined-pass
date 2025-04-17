@@ -49,3 +49,7 @@ form {
     margin: auto;
     border-radius: 2px;
 }
+input[type=text]{
+    height: auto;
+    text-box-trim:none;
+}
